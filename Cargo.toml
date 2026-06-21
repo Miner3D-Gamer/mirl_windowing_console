@@ -1,0 +1,31 @@
+[package]
+name = "mirl_windowing_console"
+version = "0.0.0-alpha"
+edition = "2024"
+repository.workspace = true
+license.workspace = true
+authors.workspace = true
+[features]
+all = []
+_checking = []
+c_compatible = []
+
+[dependencies]
+mirl_windowing_core = { version = "0.0.0-alpha" }
+mirl_system = { version = "0.0.0-alpha" }
+mirl_buffer = { version = "0.0.0-alpha" }
+mirl_buffer_interpolation = { version = "0.0.0-alpha" }
+mirl_core = { version = "0.0.0-alpha" }
+mirl_extensions = { version = "0.0.0-alpha" }
+mirl_input = { version = "0.0.0-alpha" }
+mirl_terminal = { version = "0.0.0-alpha" }
+
+raw-window-handle = { version = ">=0.6.2", default-features = false }
+
+crossterm = { version = "0" }
+
+[lints]
+workspace = true
+
+[build-dependencies]
+mirl_build_tools = { workspace = true }
