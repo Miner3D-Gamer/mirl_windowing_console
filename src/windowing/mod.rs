@@ -2,7 +2,7 @@ use crossterm::{ExecutableCommand, event};
 use std::fmt::Write;
 
 use mirl_buffer::Buffer;
-use mirl_core::platform::keycodes::KeyCode;
+use mirl_input::keyboard::KeyCode;
 use mirl_extensions::*;
 use mirl_input::mouse::MouseButton;
 use mirl_system::traits::WindowRenderLayer;
@@ -69,6 +69,7 @@ impl NewWindow for Framework {
         })
     }
 }
+
 impl Framework {
     /// Poll for mouse and keyboard events
     fn poll_events(&self) -> Result<(), WindowError> {
@@ -90,7 +91,7 @@ impl Framework {
                                 WindowError::Misc(format!(
                                     "Error while trying to lock mouse buttons (1): {x}"
                                 ))
-                            })?[idx] = true;
+                            })?[idx.to_number::<usize>()] = true;
                         }
                         crossterm::event::MouseEventKind::Up(btn) => {
                             let idx = button_to_index(btn);
@@ -98,7 +99,7 @@ impl Framework {
                                 WindowError::Misc(format!(
                                     "Error while trying to lock mouse buttons (2): {x}"
                                 ))
-                            })?[idx] = false;
+                            })?[idx.to_number::<usize>()] = false;
                         }
                         _ => {}
                     }
@@ -146,11 +147,13 @@ impl MouseInput for Framework {
         self.mouse_buttons.lock().is_ok_and(|x| x[idx])
     }
 }
-const fn button_to_index(btn: crossterm::event::MouseButton) -> usize {
+#[must_use]
+/// Convert a crossterm mouse button event into a mirl mouse button
+pub const fn button_to_index(btn: crossterm::event::MouseButton) -> mirl_input::mouse::MouseButton {
     match btn {
-        crossterm::event::MouseButton::Left => 0,
-        crossterm::event::MouseButton::Right => 1,
-        crossterm::event::MouseButton::Middle => 2,
+        crossterm::event::MouseButton::Left => mirl_input::mouse::MouseButton::Left,
+        crossterm::event::MouseButton::Right => mirl_input::mouse::MouseButton::Right,
+        crossterm::event::MouseButton::Middle => mirl_input::mouse::MouseButton::Middle,
     }
 }
 impl Window for Framework {
@@ -205,8 +208,11 @@ impl Window for Framework {
         for line in data {
             let _ = write!(final_text, "\n|{line}|");
         }
-        let _ = write!(final_text, "\n+{}+",
-            '-'.repeat_value(self.width).concatenate());
+        let _ = write!(
+            final_text,
+            "\n+{}+",
+            '-'.repeat_value(self.width).concatenate()
+        );
 
         println!("{final_text}");
         self.poll_events()?;
@@ -318,8 +324,9 @@ impl ExtendedWindow for Framework {
         self.name = title.to_string();
     }
 }
-
-const fn crossterm_to_keycode(key: crossterm::event::KeyCode) -> KeyCode {
+#[must_use]
+/// Convert a crossterm keycode event into a mirl keycode
+pub const fn crossterm_to_keycode(key: crossterm::event::KeyCode) -> KeyCode {
     match key {
         crossterm::event::KeyCode::Char('a' | 'A') => KeyCode::KeyA,
         crossterm::event::KeyCode::Char('b' | 'B') => KeyCode::KeyB,
