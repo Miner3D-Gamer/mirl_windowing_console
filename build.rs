@@ -1,4 +1,4 @@
-//! Check [`mirl_build_tools`] for documentation
+//! Check [`mirl_build_tools::setup`] for documentation
 fn main() {
-    mirl_build_tools::setup();
+    mirl_build_tools::setup(true);
 }
