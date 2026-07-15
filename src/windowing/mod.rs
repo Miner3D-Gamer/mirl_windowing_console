@@ -2,8 +2,8 @@ use crossterm::{ExecutableCommand, event};
 use std::fmt::Write;
 
 use mirl_buffer::Buffer;
-use mirl_input::keyboard::KeyCode;
 use mirl_extensions::*;
+use mirl_input::keyboard::KeyCode;
 use mirl_input::mouse::MouseButton;
 use mirl_system::traits::WindowRenderLayer;
 

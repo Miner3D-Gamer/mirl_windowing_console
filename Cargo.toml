@@ -2,13 +2,32 @@
 name = "mirl_windowing_console"
 version = "0.0.0-alpha"
 edition = "2024"
-repository.workspace = true
 license.workspace = true
 authors.workspace = true
+
 [features]
-all = []
-_checking = []
-c_compatible = []
+all = [
+    "mirl_buffer/all",
+    "mirl_extensions/all",
+    "mirl_input/all",
+    "mirl_system/all",
+    "mirl_windowing_core/all",
+]
+_checking = [
+    "mirl_buffer/_checking",
+    "mirl_extensions/_checking",
+    "mirl_input/_checking",
+    "mirl_system/_checking",
+    "mirl_windowing_core/_checking",
+]
+c_compatible = [
+    "mirl_buffer/c_compatible",
+    "mirl_buffer_interpolation/c_compatible",
+    "mirl_extensions/c_compatible",
+    "mirl_input/c_compatible",
+    "mirl_system/c_compatible",
+    "mirl_windowing_core/c_compatible",
+]
 
 [dependencies]
 crossterm = { version = "0" }
